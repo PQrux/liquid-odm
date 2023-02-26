@@ -1,18 +1,20 @@
 {
-  "name": "package_name",
+  "name": "@pqrux/liquid-odm",
   "version": "1.0.0",
-  "description": "{{YOUR_PACKAGE_DESCRIPTION}}",
-  "author": "{{YOUR_USERNAME}}",
+  "description": "Generic Typescript ODM for NoSQL databases.",
+  "author": "pqrux",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "{{REPO_URL}}"
+    "url": "https://github.com/PQrux/liquid-odm.git"
   },
   "bugs": {
-    "url": "{{BUGS_URL}}"
+    "url": "https://github.com/PQrux/liquid-odm/issues"
   },
-  "homepage": "{{YOUR_HOME_PAGE}}",
-  "keywords": [],
+  "homepage": "https://github.com/PQrux/liquid-odm",
+  "keywords": [
+    "odm", "npm", "nodejs", "orm", "firebase", "realtime-database"
+  ],
   "main": "lib/index.js",
   "files": [
     "lib"

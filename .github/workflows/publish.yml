@@ -30,11 +30,11 @@ jobs:
 #        env:
 #          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
        
-       # PUBLISH TO GITHUB PACKAGE REGISTRY
-#      - uses: actions/setup-node@v3
-#        with:
-#          registry-url: 'https://npm.pkg.github.com'
-#      - name: Publish to github registry
-#        run: npm publish
-#        env:
-#          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # PUBLISH TO GITHUB PACKAGE REGISTRY
+      - uses: actions/setup-node@v3
+        with:
+          registry-url: 'https://npm.pkg.github.com'
+      - name: Publish to github registry
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
