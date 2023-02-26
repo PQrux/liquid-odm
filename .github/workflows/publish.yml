@@ -1,0 +1,40 @@
+name: Publish
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  publish:
+
+    runs-on: ubuntu-latest
+    permissions: 
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+          registry-url: 'https://registry.npmjs.org'
+      - name: Install dependencies
+        run: npm ci
+      - name: Run build
+        run: npm run build
+      
+       # PUBLISH TO NPM
+#      - name: Publish to npm registry
+#        run: npm publish
+#        env:
+#          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+       
+       # PUBLISH TO GITHUB PACKAGE REGISTRY
+#      - uses: actions/setup-node@v3
+#        with:
+#          registry-url: 'https://npm.pkg.github.com'
+#      - name: Publish to github registry
+#        run: npm publish
+#        env:
+#          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
