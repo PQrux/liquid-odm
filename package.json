@@ -1,6 +1,6 @@
 {
   "name": "@pqrux/liquid-odm",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Generic Typescript ODM for NoSQL databases.",
   "author": "pqrux",
   "license": "MIT",
