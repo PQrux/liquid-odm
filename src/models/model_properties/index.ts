@@ -13,7 +13,21 @@ export default class ModelProperties{
     }
 
     prepareProperties(data: any){
-        
+        const errors: {[key: string]: Error} = {};
+        for(let [key, prop] of Object.entries(this.properties)){
+            try{
+                data[key] = this.prepareProperty(data[key], prop);
+            }
+            catch(err){
+                errors[key] = <Error>err;
+            }
+        }
+
+        if(Object.keys(errors).length > 0){
+            throw new ModelValidationError('VALIDATION_ERROR', {errors, data});
+        }
+
+        return data;
     }
 
     protected prepareProperty(currentValue: any, prop: ModelPropertyTypes){
@@ -25,22 +39,26 @@ export default class ModelProperties{
                 throw new ModelValidationError('PROPERTY_UNDEFINED');
             }
             else{
-                return null;
+                return undefined;
             }
         }
 
         
         switch(prop.type){
-            case "string": return this.prepareStringProperty(currentValue, prop);
-            case "number": return this.prepareNumberProperty(currentValue, prop);
-            case "boolean": return this.prepareBooleanProperty(currentValue, prop);
-            case "date": return this.prepareDateProperty(currentValue, prop);
-            case "doc_ref": return this.prepareDocRefProperty(currentValue, prop);
-            case "enum": return this.prepareEnumProperty(currentValue, prop);
-            case "map": return this.prepareMapProperty(currentValue, prop);
-            case "array": return this.prepareArrayProperty(currentValue, prop);
+            case "string": currentValue = this.prepareStringProperty(currentValue, prop); break;
+            case "number": currentValue = this.prepareNumberProperty(currentValue, prop); break;
+            case "boolean": currentValue = this.prepareBooleanProperty(currentValue, prop); break;
+            case "date": currentValue = this.prepareDateProperty(currentValue, prop); break;
+            case "doc_ref": currentValue = this.prepareDocRefProperty(currentValue, prop); break;
+            case "enum": currentValue = this.prepareEnumProperty(currentValue, prop); break;
+            case "map": currentValue = this.prepareMapProperty(currentValue, prop); break;
+            case "array": currentValue = this.prepareArrayProperty(currentValue, prop); break;
             default: throw new ModelValidationError('UNIMPLEMENTED_TYPE');
         }
+
+        useValidate(currentValue, prop);
+
+        return currentValue;
     }
 
     protected prepareStringProperty(currentValue: string, prop: StringModelProperty){
@@ -56,8 +74,6 @@ export default class ModelProperties{
             throw new ModelValidationError('MIN_LENGTH_UNREACHED', {min: prop.min});
         }
 
-        useValidate(currentValue, prop);
-
         return currentValue;
     }
 
@@ -72,14 +88,10 @@ export default class ModelProperties{
             currentValue = round(currentValue, prop.maxFractionDigits);
         }
 
-        useValidate(currentValue, prop);
-
         return currentValue;
     }
 
     protected prepareBooleanProperty(currentValue: boolean, prop: BooleanModelProperty){
-        useValidate(currentValue, prop);
-
         return currentValue;
     }
 
@@ -95,8 +107,6 @@ export default class ModelProperties{
             throw new ModelValidationError('MIN_UNREACHED', {min: prop.min});
         }
 
-        useValidate(currentValue, prop);
-
         return currentValue;
     }
 
@@ -104,15 +114,14 @@ export default class ModelProperties{
         if(!(currentValue in prop.enum)){
             throw new ModelValidationError('INVALID_ENUM_VALUE', {enum: prop.enum});
         }
-
-        useValidate(currentValue, prop);
         
         return currentValue;
     }
 
     protected prepareDocRefProperty(currentValue: DocRef<any>, prop: DocRefModelProperty){
-
-        useValidate(currentValue, prop);
+        if(!currentValue.uid){
+            throw new ModelValidationError('INVALID_DOCREF');
+        }
 
         return currentValue;
     }
@@ -125,8 +134,6 @@ export default class ModelProperties{
             throw new ModelValidationError('MIN_UNREACHED', {min: prop.min});
         }
 
-        useValidate(currentValue, prop);
-
         return currentValue;
     }
 
@@ -138,8 +145,6 @@ export default class ModelProperties{
         if(prop.min && length < prop.min){
             throw new ModelValidationError('MIN_UNREACHED', {min: prop.min});
         }
-
-        useValidate(currentValue, prop);
 
         return currentValue;
     }

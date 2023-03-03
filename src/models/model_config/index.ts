@@ -7,20 +7,20 @@ export enum UIDModes{
 
 export interface ModelConfigProps{
     ROOT_PATH: string;
-    DESCRIPTORS: ModelProperties;
+    PROPERTIES: ModelProperties;
     UID_MODE?: UIDModes;
     WITH_DATES?: boolean;
 }
 
 export default class ModelConfig{
     readonly ROOT_PATH;
-    readonly DESCRIPTORS;
+    readonly PROPERTIES;
     readonly UID_MODE;
     readonly WITH_DATES;
 
     constructor(props: ModelConfigProps){
         this.ROOT_PATH = props.ROOT_PATH;
-        this.DESCRIPTORS = props.DESCRIPTORS;
+        this.PROPERTIES = props.PROPERTIES;
         this.UID_MODE = props.UID_MODE || UIDModes.GUID;
         this.WITH_DATES = props.WITH_DATES;
     }

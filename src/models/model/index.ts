@@ -13,7 +13,7 @@ export interface DatedProps{
 
 export default abstract class Model<Props>{
     public path?: string;
-    protected data: Props = <Props>{};
+    public data: Props = <Props>{};
     public abstract getModelConfig(): ModelConfig;
 
     public get MODEL_CONFIG(){
@@ -24,8 +24,8 @@ export default abstract class Model<Props>{
         return this.path?.split("/").pop();
     }
 
-    public set setUID(basePath: string){
-        this.path = `${this.MODEL_CONFIG.ROOT_PATH}/${basePath.split("/").pop()||undefined}`;
+    public set UID(basePath: string | undefined){
+        this.path = basePath ? `${this.MODEL_CONFIG.ROOT_PATH}/${basePath?.split("/").pop()||undefined}` : undefined;
     }
 
     constructor(path?: string, data?: Props){
@@ -36,7 +36,7 @@ export default abstract class Model<Props>{
     setRef<M extends Model<any>>(prop: keyof PickByValueExact<Props, DocRef<M>>, doc: M){
         if(!doc.UID) throw new NoPathError('REFERENCE_HAS_NO_PATH');
         let label: any;
-        const modelProp = <DocRefModelProperty>this.MODEL_CONFIG.DESCRIPTORS.properties[prop];
+        const modelProp = <DocRefModelProperty>this.MODEL_CONFIG.PROPERTIES.properties[prop];
         if(typeof modelProp.refProperty === 'string'){
             label = doc.data[modelProp.refProperty];
         }
